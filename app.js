@@ -10,8 +10,9 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/user",require("./Auth/auth.route"))
-app.use("/api",require("./User/user.route"))
+app.use("/auth",require("./Auth/auth.route"))
+app.use("/user",require("./User/user.route"))
+app.use("/task",require("./Task/task.route"))
 
 app.use(errorHandler);
 

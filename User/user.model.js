@@ -13,19 +13,6 @@ const userSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
-    role:{
-        userId:mongoose.Types.ObjectId,
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Role"
-    },
-    profileImg:{
-        type:String
-    },
-    address:[{
-        streat:String,
-        city:String,
-        town:String 
-    }]
     
 })
 

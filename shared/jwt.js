@@ -21,23 +21,23 @@ exports.sign = async(user)=>{
   };
 
   try {
-    return jwt.sign(payload, "shivam", signOptions);
+    return jwt.sign(payload, process.env.JWT_PrivateKey, signOptions);
   } catch (err) { throw new Error(err.message)}
 }
 
 exports.verify = function (req, res, secret = null) {
-    let token = req.headers["x-access-token"] || req.headers["authorization"];
-    if (!token || token === "") {
+  let token = req.headers["x-access-token"] || req.headers["authorization"];
+  if (!token || token === "") {
+    return null;
+  } else if (token.startsWith("Bearer ")) {
+    // Remove Bearer from string
+    token = token.slice(7, token.length);
+
+    try {
+      let info = jwt.verify(token, secret || process.env.JWT_PrivateKey);
+      return info;
+    } catch (err) {
       return null;
-    } else if (token.startsWith("Bearer ")) {
-      // Remove Bearer from string
-      token = token.slice(7, token.length);
-  
-      try {
-        let info = jwt.verify(token, secret || process.env.JWT_PrivateKey);
-        return info;
-      } catch (err) {
-        return null;
-      }
     }
-  };
+  }
+};
