@@ -1,5 +1,5 @@
 {
-  "name": "todo app",
+  "name": "todoapp",
   "version": "1.0.0",
   "description": "This application is demostrate the redis and queue in todo application",
   "main": "app.js",
@@ -9,11 +9,15 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "bull": "^4.12.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.0.3"
+    "mongoose": "^8.0.3",
+    "node-cron": "^3.0.3",
+    "nodemailer": "^6.9.7",
+    "redis": "^4.6.12"
   }
 }

@@ -48,12 +48,9 @@ exports.getById = async (req, res, next) => {
 
 exports._update = async (req, res, next) => {
   try {
-    const Task = await taskService.updateTask(req.params.taskId,req.body);
-    if (Task instanceof Error) {
-      throw new Error(Task?.message);
-    }
+   await taskService.updateTask(req.params.taskId,req.body);
     redisCli.delete('tasks')
-    return res.json({ code: message.get("SUCCESS_STATUS_CODE"), data: Task });
+    return res.json({ code: message.get("SUCCESS_STATUS_CODE"), message:"Task Successfully updated" });
   } catch (error) {
     next(error)
   }

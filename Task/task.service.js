@@ -1,4 +1,12 @@
 const TaskModel = require("./task.model")
+const Queue = require('bull');
+
+let taskUpdateQueue = new Queue('taskUpdateQueue', {
+    redis: {
+        host: process.env.REDISURI,
+        port: process.env.REDISPORT,
+    },
+});
 
 exports.createTask = async (taskParams) => {
     try {
@@ -31,20 +39,24 @@ exports.findAllTask = async () => {
     }
 };
 
-exports.updateTask = async (taskId,taskParams) => {
+exports.updateTask = async (taskId, taskParams) => {
     try {
-        console.log(taskId,taskParams)
-        const updatedTask = await TaskModel.findByIdAndUpdate(
-            taskId,
-            taskParams,
-            { new: true } 
-          );
-        console.log(updatedTask)
-        return updatedTask;
+        let x = await taskUpdateQueue.add('taskUpdateQueue', { taskId, taskParams });
+        return;
     } catch (error) {
         throw new Error(error.message);
     }
 };
+
+taskUpdateQueue.process('taskUpdateQueue', async (job) => {
+    const { taskId, taskParams } = job.data;
+    const updatedTask = await TaskModel.findByIdAndUpdate(taskId, taskParams, { new: true });
+    console.log('Task updated:', updatedTask);
+});
+
+taskUpdateQueue.on('completed', (job) => {
+    console.log(`Task successfully updated: ${job.data}`);
+});
 
 exports._deleteTask = async (taskParams) => {
     try {
