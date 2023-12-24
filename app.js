@@ -34,6 +34,6 @@ mongoose.connect(DB_URL).then((data)=>{
 
 const PORT = process.env.PORT
 app.listen(PORT,()=>{
-    console.log("server is running on port 3000s");
+    console.log(`server is running on port ${PORT}`);
 })
 

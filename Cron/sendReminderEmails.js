@@ -21,7 +21,6 @@ exports.scheduleTaskReminders = async () => {
       },
       status: "pending"
     }).populate("user");
-    console.log(upcomingTasks)
     upcomingTasks.forEach(async (task) => {
       await reminderQueue.add('sendReminderEmail', { userEmail: task.user.email, taskTitle: task.title });
       console.log(`Reminder added in queue: ${task.title}`);
@@ -31,7 +30,7 @@ exports.scheduleTaskReminders = async () => {
   }
 }
 
-
+//Here now i did not write logic to retry mechanism, but we can do later .
 reminderQueue.process('sendReminderEmail', async (job) => {
   const { userEmail, taskTitle } = job.data;
   const mailOptions = {
@@ -41,7 +40,7 @@ reminderQueue.process('sendReminderEmail', async (job) => {
     text: `Hello,\n\nThis is a reminder that your task ${taskTitle} is due within the next 24 hours.\nPlease take necessary action.\n\nThank you.`,
   };
   await sendEmail.send(mailOptions)
-  console.log(`Sent reminder email====>: ${res}`);
+  console.log("Sent reminder email Successfully");
 });
 
 reminderQueue.on('completed', (job) => {
